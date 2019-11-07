@@ -72,8 +72,7 @@ class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(context: Context, item: Planner) {
-        component.newEvent(context, item)
-
+        component.newEvent(context, fragmentManager!!, item)
     }
 
 
