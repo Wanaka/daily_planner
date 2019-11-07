@@ -12,4 +12,8 @@
     <string name="set_notification">Set Notification</string>
     <string name="done">Done</string>
     <string name="wake_up">Wake the fuck up!!!</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="sub_title">A small description</string>
+    <string name="title">Your event\'s name</string>
 </resources>

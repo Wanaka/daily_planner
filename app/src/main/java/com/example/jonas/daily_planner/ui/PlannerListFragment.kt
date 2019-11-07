@@ -1,28 +1,34 @@
 package com.example.jonas.daily_planner.ui
 
+import android.app.AlertDialog
 import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.di.DaggerMyComponent
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
 import com.example.jonas.daily_planner.ui.rv.TimeAdapter
 import kotlinx.android.synthetic.main.fragment_planer_list.*
 import javax.inject.Inject
 
-class PlannerListFragment: Fragment() {
+class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
     lateinit var plannerViewModel: PlannerViewModel
 
+    @Inject
+    lateinit var component: NavigatorImpl
 
 
      override fun onAttach(context: Context?) {
@@ -40,7 +46,7 @@ class PlannerListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var itemList: List<Planner>
-        var numberList: List<String>
+        var numberList: List<Int>
 
         plannerViewModel. callWakeUpTime().observe(this, Observer {
             numberRecyclerView.apply {
@@ -58,10 +64,17 @@ class PlannerListFragment: Fragment() {
             itemRecyclerView.apply {
                 layoutManager = LinearLayoutManager(context)
 
-                adapter = PlannerAdapter(itemList, context)
+                adapter = PlannerAdapter(itemList,context, this@PlannerListFragment)
             }
         })
 
 
     }
+
+    override fun onItemClick(context: Context, item: Planner) {
+        component.newEvent(context, item)
+
+    }
+
+
 }

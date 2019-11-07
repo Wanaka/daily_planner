@@ -11,7 +11,7 @@ import com.example.jonas.daily_planner.model.Planner
 import kotlinx.android.synthetic.main.number_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.*
 
-class TimeAdapter(private val items : List<String>, private val context: Context) : RecyclerView.Adapter<TimeViewHolder>() {
+class TimeAdapter(private val items : List<Int>, private val context: Context) : RecyclerView.Adapter<TimeViewHolder>() {
 
     override fun getItemCount(): Int {
         return items.size
@@ -29,7 +29,7 @@ class TimeAdapter(private val items : List<String>, private val context: Context
 
     // Binds each animal in the ArrayList to a view
     override fun onBindViewHolder(holder: TimeViewHolder, position: Int) {
-        holder.itemNumber.text = items[position]
+        holder.itemNumber.text = items[position].toString()
     }
 }
 

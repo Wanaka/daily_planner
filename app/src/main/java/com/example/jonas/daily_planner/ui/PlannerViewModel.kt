@@ -12,7 +12,7 @@ class PlannerViewModel @Inject constructor(private val repository: Repository): 
         return repository.addPlannerDummy()
     }
 
-    fun callWakeUpTime(): LiveData<List<String>>{
+    fun callWakeUpTime(): LiveData<List<Int>>{
         return repository.calculateWakeUpTime()
     }
 }
