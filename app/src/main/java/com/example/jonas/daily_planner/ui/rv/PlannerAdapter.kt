@@ -23,7 +23,7 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
 
 
     interface OnItemClickListener {
-        fun onItemClick(context: Context, item: Planner)
+        fun onItemClick(context: Context, item: Planner, position: Int)
     }
 
     override fun getItemCount(): Int {
@@ -69,7 +69,7 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
         return viewHolder
     }
 
-    // Binds each animal in the ArrayList to a view
+    // Binds each item in the ArrayList to a view
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if(getItemViewType(position) == FIRST){
             (holder as WakeUpViewHolder)
@@ -81,7 +81,7 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
             holder.listItem.layoutParams.height *= items[position].duration
             //holder.textt.text_.text = items[position].title
                 holder.listItem.setOnClickListener {
-                    mListener!!.onItemClick(context, items[position])
+                    mListener!!.onItemClick(context, items[position], position)
                 }
         }
     }

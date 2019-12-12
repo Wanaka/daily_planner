@@ -1,6 +1,5 @@
 package com.example.jonas.daily_planner.ui
 
-import android.app.AlertDialog
 import android.arch.lifecycle.*
 import android.arch.lifecycle.Observer
 import android.content.Context
@@ -11,7 +10,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.di.DaggerMyComponent
 import com.example.jonas.daily_planner.model.Planner
@@ -48,15 +46,16 @@ class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
         var itemList: List<Planner>
         var numberList: List<Int>
 
-        plannerViewModel. callWakeUpTime().observe(this, Observer {
-            numberRecyclerView.apply {
-                numberList = it!!
-
-                layoutManager = LinearLayoutManager(context)
-
-                adapter = TimeAdapter(numberList, context)
-            }
-        })
+        //Remove laters
+//        plannerViewModel. callWakeUpTime().observe(this, Observer {
+//            numberRecyclerView.apply {
+//                numberList = it!!
+//
+//                layoutManager = LinearLayoutManager(context)
+//
+//                adapter = TimeAdapter(numberList, context)
+//            }
+//        })
 
         plannerViewModel.callDummyData().observe(this, Observer {
             itemList = it!!
@@ -71,9 +70,7 @@ class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
 
     }
 
-    override fun onItemClick(context: Context, item: Planner) {
+    override fun onItemClick(context: Context, item: Planner, position: Int) {
         component.newEvent(context, fragmentManager!!, item)
     }
-
-
 }
