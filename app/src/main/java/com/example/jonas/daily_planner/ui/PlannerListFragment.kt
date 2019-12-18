@@ -1,25 +1,33 @@
 package com.example.jonas.daily_planner.ui
 
-import android.arch.lifecycle.*
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.jonas.daily_planner.R
-import com.example.jonas.daily_planner.di.DaggerMyComponent
+import com.example.jonas.daily_planner.base.BaseFragment
+import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
+import com.example.jonas.daily_planner.repository.Repository
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
-import com.example.jonas.daily_planner.ui.rv.TimeAdapter
 import kotlinx.android.synthetic.main.fragment_planer_list.*
+import kotlinx.android.synthetic.main.item_popup.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.lang.ClassCastException
 import javax.inject.Inject
 
-class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
+class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -29,22 +37,29 @@ class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
     lateinit var component: NavigatorImpl
 
 
-     override fun onAttach(context: Context?) {
+    var inputText: String? = ""
+
+
+    override fun onAttach(context: Context?) {
          super.onAttach(context)
 
-         DaggerMyComponent.create().inject(this)
+         DaggerAppComponent.create().inject(this)
 
          plannerViewModel = ViewModelProviders.of(this, factory).get(PlannerViewModel::class.java)
      }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        inputText = arguments?.getString(KEY_POP_FRAGMENT_DATA)
+
+        if(inputText != null) sendToFiB(inputText!!)
+
         return inflater.inflate(R.layout.fragment_planer_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var itemList: List<Planner>
-        var numberList: List<Int>
 
         //Remove laters
 //        plannerViewModel. callWakeUpTime().observe(this, Observer {
@@ -66,11 +81,18 @@ class PlannerListFragment: Fragment(), PlannerAdapter.OnItemClickListener {
                 adapter = PlannerAdapter(itemList,context, this@PlannerListFragment)
             }
         })
+    }
 
-
+    private fun sendToFiB(send: String){
+        Log.d(",,,", "inputssss: $send")
     }
 
     override fun onItemClick(context: Context, item: Planner, position: Int) {
         component.newEvent(context, fragmentManager!!, item)
+    }
+
+
+    companion object {
+        const val KEY_POP_FRAGMENT_DATA = "KEY_POP_FRAGMENT_DATA"
     }
 }

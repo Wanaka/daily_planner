@@ -7,7 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -20,7 +20,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:textSize="12sp"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/itemRecyclerView"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -34,7 +34,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_todays_activity"
                 app:layout_constraintVertical_bias="0.0" />
 
-        <android.support.design.widget.FloatingActionButton
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:layout_width="wrap_content"
                 android:layout_height="38dp"
                 android:clickable="true"
@@ -52,7 +52,7 @@
                 android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent" android:textSize="8sp"/>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/numberRecyclerView"
                 android:layout_width="50dp"
                 android:layout_height="0dp"
@@ -60,5 +60,5 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/itemRecyclerView" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

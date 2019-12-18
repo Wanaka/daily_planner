@@ -1,46 +1,47 @@
 package com.example.jonas.daily_planner.ui
 
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
-import android.util.Log
+import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
 import com.example.jonas.daily_planner.R
-import com.example.jonas.daily_planner.di.DaggerMyComponent
 import com.example.jonas.daily_planner.model.Planner
 import kotlinx.android.synthetic.main.item_popup.*
 
 class PopUpFragment: DialogFragment() {
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+    interface Communicator {
+        fun passDataFromPopFragmentToPlannerFragment(editext_input: String)
     }
 
+    lateinit var communicator: Communicator
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        communicator = activity as Communicator
         return inflater.inflate(R.layout.item_popup, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text_start_time.text = this!!.arguments!![KEY_START_TIME].toString()
-        slider_end_time.max = this!!.arguments!![KEY_HOURS] as Int
-        slider_end_time.min = 0
-        slider_end_time.progress = this!!.arguments!![KEY_HOURS] as Int
-        text_hours.text = this!!.arguments!![KEY_HOURS].toString()
+        starting_time.text = arguments?.get(GET_STARTING_TIME).toString()
+        hours.text = arguments?.get(GET_HOURS).toString()
+        slider.max = arguments?.get(GET_HOURS) as Int
+        slider.progress = arguments?.get(GET_HOURS) as Int
 
-        slider_end_time.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        slider()
+        saveButtonClick()
+    }
+
+    private fun slider(){
+        slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                // Display the current progress of SeekBar
-                slider_end_time.setProgress(i, true)
-                text_hours.text = i.toString()
+                slider.setProgress(i, true)
+                hours.text = i.toString()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -48,20 +49,33 @@ class PopUpFragment: DialogFragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 if (seekBar.progress == 0) seekBar.progress = 1
             }
+
         })
     }
 
+    private fun saveButtonClick(){
+        save_item.setOnClickListener {
+            try {
+                communicator.passDataFromPopFragmentToPlannerFragment(input_title.text.toString())
+                dismiss()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+
     companion object {
-        const val KEY_START_TIME = "key_start_time"
-        const val KEY_HOURS = "key_hours"
+        const val GET_STARTING_TIME = "key_start_time"
+        const val GET_HOURS = "key_hours"
 
         fun newInstance(item: Planner): PopUpFragment{
-            val frag = PopUpFragment()
+            val popUpFragment = PopUpFragment()
             val bundle = Bundle()
-            bundle.putInt(KEY_START_TIME, item.startTime)
-            bundle.putInt(KEY_HOURS, item.distanceToClosestFilledItem)
-            frag.arguments = bundle
-            return frag
+            bundle.putInt(GET_STARTING_TIME, item.startTime)
+            bundle.putInt(GET_HOURS, item.distanceToClosestFilledItem)
+            popUpFragment.arguments = bundle
+            return popUpFragment
         }
     }
 }

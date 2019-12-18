@@ -1,6 +1,7 @@
 package com.example.jonas.daily_planner.di
 
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
+import com.example.jonas.daily_planner.repository.Repository
 import dagger.Module
 import dagger.Provides
 
@@ -9,5 +10,10 @@ class Modules {
     @Provides
     open fun navigator(): NavigatorImpl {
         return NavigatorImpl()
+    }
+
+    @Provides
+    open fun repository(): Repository {
+        return Repository()
     }
 }

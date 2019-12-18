@@ -1,7 +1,7 @@
 package com.example.jonas.daily_planner.repository
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.jonas.daily_planner.model.Planner
 import javax.inject.Inject
@@ -14,7 +14,7 @@ class Repository @Inject constructor() {
     fun addPlannerDummy(): LiveData<List<Planner>> {
         var mutableList = MutableLiveData<List<Planner>>()
         var plannerDummy: ArrayList<Planner> = ArrayList()
-//        plannerDummy.add(Planner("Working", "My awesome project", 8, 3, 1, 0, false))
+        plannerDummy.add(Planner("Working", "My awesome project", 8, 3, 1, 0, false))
         plannerDummy.add(Planner("Working", "My awesome project", 19, 2, 1, 0, false))
 
         var itemList = arrayListOf<Planner>()
@@ -70,27 +70,17 @@ class Repository @Inject constructor() {
                     }
 
                     if(i.startTime < dummyStartTime && i.startTime != 0){
-
                         i.distanceToClosestFilledItem = dummyStartTime - i.startTime
-//                        Log.d("MMM", "starttime less than dummy ${i.startTime}, dummy: $dummyStartTime, diff: ${dummyStartTime - i.startTime}")
-                        Log.d("MMM", "i.distanceToClosestFilledItem ${ i.distanceToClosestFilledItem}")
                         break
                     }
 
                     if(i.startTime > biggestDummy && i.startTime < sleepTime){
                         i.distanceToClosestFilledItem = sleepTime - i.startTime
-
-//                        Log.d("MMM", "starttime MORE than dummy ${i.startTime}, diff: ${sleepTime - i.startTime}")
-                        Log.d("MMM", "i.distanceToClosestFilledItem BIGG ${ i.distanceToClosestFilledItem}")
-
                     }
                 }
 
             }
         }
-            // skapa funktion som kollar om det finns någon fylld item
-        //om ej, räkna avstånd till slutet
-        //om det finns, räkna avstånd till den första item efter klickta tomma item
 
 
         mutableList.value = itemList
