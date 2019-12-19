@@ -3,10 +3,8 @@ package com.example.jonas.daily_planner.ui
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -16,15 +14,8 @@ import com.example.jonas.daily_planner.base.BaseFragment
 import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
-import com.example.jonas.daily_planner.repository.Repository
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
 import kotlinx.android.synthetic.main.fragment_planer_list.*
-import kotlinx.android.synthetic.main.item_popup.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.ClassCastException
 import javax.inject.Inject
 
 class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
@@ -37,7 +28,7 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
     lateinit var component: NavigatorImpl
 
 
-    var inputText: String? = ""
+    var item: Planner? = null
 
 
     override fun onAttach(context: Context?) {
@@ -50,9 +41,9 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        inputText = arguments?.getString(KEY_POP_FRAGMENT_DATA)
+        item = arguments?.get(KEY_POP_FRAGMENT_DATA) as? Planner
 
-        if(inputText != null) sendToFiB(inputText!!)
+        if(item != null) sendToFiB(item!!)
 
         return inflater.inflate(R.layout.fragment_planer_list, container, false)
     }
@@ -83,8 +74,8 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
         })
     }
 
-    private fun sendToFiB(send: String){
-        Log.d(",,,", "inputssss: $send")
+    private fun sendToFiB(item: Planner){
+        Log.d(",,,", "inputssss: ${item.title}, ${item.description}, ${item.startTime}, ${item.duration}")
     }
 
     override fun onItemClick(context: Context, item: Planner, position: Int) {

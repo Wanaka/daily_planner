@@ -1,8 +1,13 @@
 package com.example.jonas.daily_planner.ui
 
 import android.os.Bundle
+import android.os.Parcelable
+import android.util.Log
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.base.BaseActivity
+import com.example.jonas.daily_planner.model.Planner
+import kotlinx.android.synthetic.main.item_popup.*
+import java.io.Serializable
 
 class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
 
@@ -15,9 +20,9 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
             .commit()
     }
 
-    override fun passDataFromPopFragmentToPlannerFragment(editext_input: String) {
+    override fun passDataFromPopFragmentToPlannerFragment(item: Planner) {
         val bundle = Bundle()
-        bundle.putString(KEY_POP_FRAGMENT_DATA,editext_input)
+        bundle.putSerializable(KEY_POP_FRAGMENT_DATA, item as Serializable)
 
         val passData = PlannerListFragment()
         passData.arguments = bundle
