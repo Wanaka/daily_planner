@@ -12,6 +12,10 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
         return component.addPlannerDummy()
     }
 
+    suspend fun sendItemToRepo(item: Planner){
+        return component.postItemToFiB(item)
+
+    }
     fun callWakeUpTime(): LiveData<List<Int>>{
         return component.calculateWakeUpTime()
     }

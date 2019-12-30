@@ -2,11 +2,11 @@ package com.example.jonas.daily_planner.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import android.util.Log
 import com.example.jonas.daily_planner.model.Planner
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
-class Repository @Inject constructor() {
+class Repository @Inject constructor(var fireStoreService: FireStoreService) {
     var wakeupTime = 7
     var sleepTime = 22
 
@@ -88,6 +88,11 @@ class Repository @Inject constructor() {
         return mutableList
     }
 
+
+    suspend fun postItemToFiB(item: Planner) {
+        return fireStoreService.postToFireStore(item)
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private fun getDefaultPlanner(startTime: Int, duration: Int, type: Int, distance: Int): Planner{
        return Planner("", "", startTime, duration, type, distance,false)

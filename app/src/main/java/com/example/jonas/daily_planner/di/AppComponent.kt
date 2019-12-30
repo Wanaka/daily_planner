@@ -1,5 +1,6 @@
 package com.example.jonas.daily_planner.di
 
+import com.example.jonas.daily_planner.repository.Repository
 import com.example.jonas.daily_planner.ui.PlannerListFragment
 import com.example.jonas.daily_planner.ui.PlannerViewModel
 import dagger.Component
@@ -8,6 +9,7 @@ import dagger.Component
 interface AppComponent {
 
     fun inject(activity: PlannerListFragment)
+    fun inject(repo: Repository)
     fun inject(viewModel: PlannerViewModel)
 
 }

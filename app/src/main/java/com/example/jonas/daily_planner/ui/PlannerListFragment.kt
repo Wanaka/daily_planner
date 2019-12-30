@@ -16,6 +16,9 @@ import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
 import kotlinx.android.synthetic.main.fragment_planer_list.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
@@ -75,7 +78,9 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
     }
 
     private fun sendToFiB(item: Planner){
-        Log.d(",,,", "inputssss: ${item.title}, ${item.description}, ${item.startTime}, ${item.duration}")
+        CoroutineScope(IO).launch {
+            plannerViewModel.sendItemToRepo(item)
+        }
     }
 
     override fun onItemClick(context: Context, item: Planner, position: Int) {
