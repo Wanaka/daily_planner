@@ -1,5 +1,6 @@
 package com.example.jonas.daily_planner.ui
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.jonas.daily_planner.model.Planner
@@ -12,8 +13,8 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
         return component.addPlannerDummy()
     }
 
-    suspend fun sendItemToRepo(item: Planner){
-        return component.postItemToFiB(item)
+    suspend fun sendItemToRepo(item: Planner, context: Context){
+        return component.postItemToFiB(item, context)
 
     }
     fun callWakeUpTime(): LiveData<List<Int>>{

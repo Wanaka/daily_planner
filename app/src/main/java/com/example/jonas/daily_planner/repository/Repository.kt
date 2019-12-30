@@ -1,5 +1,6 @@
 package com.example.jonas.daily_planner.repository
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
@@ -89,9 +90,8 @@ class Repository @Inject constructor(var fireStoreService: FireStoreService) {
     }
 
 
-    suspend fun postItemToFiB(item: Planner) {
-        return fireStoreService.postToFireStore(item)
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    suspend fun postItemToFiB(item: Planner, context: Context) {
+        return fireStoreService.postToFireStore(item, context)
     }
 
     private fun getDefaultPlanner(startTime: Int, duration: Int, type: Int, distance: Int): Planner{

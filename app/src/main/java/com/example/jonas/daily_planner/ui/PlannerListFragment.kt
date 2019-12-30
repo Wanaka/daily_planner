@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -15,20 +16,25 @@ import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
+import com.example.jonas.daily_planner.util.Key
 import kotlinx.android.synthetic.main.fragment_planer_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
-class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
+class PlannerListFragment: BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
+
+    @Inject
     lateinit var plannerViewModel: PlannerViewModel
 
     @Inject
     lateinit var component: NavigatorImpl
+
 
 
     var item: Planner? = null
@@ -36,10 +42,11 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     override fun onAttach(context: Context?) {
          super.onAttach(context)
+        DaggerAppComponent.create().inject(this)
 
-         DaggerAppComponent.create().inject(this)
-
-         plannerViewModel = ViewModelProviders.of(this, factory).get(PlannerViewModel::class.java)
+        plannerViewModel = ViewModelProviders.of(this, factory).get(PlannerViewModel::class.java)
+        val key = Key(context!!)
+        key.UUID()
      }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -79,7 +86,11 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     private fun sendToFiB(item: Planner){
         CoroutineScope(IO).launch {
-            plannerViewModel.sendItemToRepo(item)
+            try {
+                plannerViewModel.sendItemToRepo(item, context!!)
+            } catch (e: Error) {
+                Log.d("TAG", "Error: $e")
+            }
         }
     }
 
