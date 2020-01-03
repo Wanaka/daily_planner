@@ -20,9 +20,12 @@ import com.example.jonas.daily_planner.util.Key
 import kotlinx.android.synthetic.main.fragment_planer_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 class PlannerListFragment: BaseFragment(), PlannerAdapter.OnItemClickListener {
 
@@ -45,9 +48,48 @@ class PlannerListFragment: BaseFragment(), PlannerAdapter.OnItemClickListener {
         DaggerAppComponent.create().inject(this)
 
         plannerViewModel = ViewModelProviders.of(this, factory).get(PlannerViewModel::class.java)
-        val key = Key(context!!)
-        key.UUID()
+        Key(context!!).UUID()
+
      }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(",,,", "onStart")
+        CoroutineScope(IO).launch {
+                        try {
+                var t = plannerViewModel.getDataFromRepo(context!!).apply {
+                    var u = plannerViewModel.get()
+                    Log.d(",,,", "fragment data: $u")
+
+                }
+                withContext(Main){
+                }
+
+            } catch (e: Error) {
+                Log.d("TAG", "Error: $e")
+            }
+        }
+
+
+        }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(",,,", "onResume")
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(",,,", "onPause")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(",,,", "onStop")
+
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -61,17 +103,6 @@ class PlannerListFragment: BaseFragment(), PlannerAdapter.OnItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         var itemList: List<Planner>
-
-        //Remove laters
-//        plannerViewModel. callWakeUpTime().observe(this, Observer {
-//            numberRecyclerView.apply {
-//                numberList = it!!
-//
-//                layoutManager = LinearLayoutManager(context)
-//
-//                adapter = TimeAdapter(numberList, context)
-//            }
-//        })
 
         plannerViewModel.callDummyData().observe(this, Observer {
             itemList = it!!

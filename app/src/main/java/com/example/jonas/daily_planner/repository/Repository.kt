@@ -1,6 +1,7 @@
 package com.example.jonas.daily_planner.repository
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
@@ -10,12 +11,12 @@ import kotlin.collections.ArrayList
 class Repository @Inject constructor(var fireStoreService: FireStoreService) {
     var wakeupTime = 7
     var sleepTime = 22
+    var plannerDummy: ArrayList<Planner> = ArrayList()
 
 
     fun addPlannerDummy(): LiveData<List<Planner>> {
         var mutableList = MutableLiveData<List<Planner>>()
-        var plannerDummy: ArrayList<Planner> = ArrayList()
-        plannerDummy.add(Planner("Working", "My awesome project", 8, 3, 1, 0, false))
+//        plannerDummy.add(Planner("Working", "My awesome project", 8, 3, 1, 0, false))
         plannerDummy.add(Planner("Working", "My awesome project", 19, 2, 1, 0, false))
 
         var itemList = arrayListOf<Planner>()
@@ -92,6 +93,13 @@ class Repository @Inject constructor(var fireStoreService: FireStoreService) {
 
     suspend fun postItemToFiB(item: Planner, context: Context) {
         return fireStoreService.postToFireStore(item, context)
+    }
+
+    fun get(): List<Planner>{
+        return fireStoreService.get()
+    }
+    suspend fun getDataFromFireStore(context: Context) {
+        return fireStoreService.getDataFromFireStore(context)
     }
 
     private fun getDefaultPlanner(startTime: Int, duration: Int, type: Int, distance: Int): Planner{
