@@ -16,4 +16,5 @@
     <string name="end">Hours</string>
     <string name="sub_title">A small description</string>
     <string name="title">Your event\'s name</string>
+    <string name="close_x">X</string>
 </resources>

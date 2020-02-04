@@ -18,7 +18,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-            android:id="@+id/text_wake_up"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"

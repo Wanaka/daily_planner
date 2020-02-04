@@ -1,7 +1,6 @@
 package com.example.jonas.daily_planner.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +10,17 @@ import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.model.Planner
 import kotlinx.android.synthetic.main.item_popup.*
 
-class PopUpFragment: DialogFragment() {
-
-    interface Communicator {
-        fun passDataFromPopFragmentToPlannerFragment(item: Planner)
-    }
+class PopUpFragment : DialogFragment() {
 
     lateinit var communicator: Communicator
     private var start: Int = 0
     private var hour = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         communicator = activity as Communicator
         return inflater.inflate(R.layout.item_popup, container, false)
@@ -39,9 +38,10 @@ class PopUpFragment: DialogFragment() {
 
         slider()
         saveButtonClick()
+        close()
     }
 
-    private fun slider(){
+    private fun slider() {
         slider.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
@@ -58,10 +58,20 @@ class PopUpFragment: DialogFragment() {
         })
     }
 
-    private fun saveButtonClick(){
+    private fun saveButtonClick() {
         save_item.setOnClickListener {
             try {
-                communicator.passDataFromPopFragmentToPlannerFragment(Planner(input_title.text.toString(), input_sub_title.text.toString(), start, hour, 1, 0, false))
+                communicator.passDataFromPopFragmentToPlannerFragment(
+                    Planner(
+                        input_title.text.toString(),
+                        input_sub_title.text.toString(),
+                        start,
+                        hours.text.toString().toInt(),
+                        1,
+                        0,
+                        false
+                    )
+                )
                 dismiss()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -69,12 +79,19 @@ class PopUpFragment: DialogFragment() {
         }
     }
 
+    private fun close() {
+        close.setOnClickListener { dismiss() }
+    }
+
+    interface Communicator {
+        fun passDataFromPopFragmentToPlannerFragment(item: Planner)
+    }
 
     companion object {
         const val GET_STARTING_TIME = "key_start_time"
         const val GET_HOURS = "key_hours"
 
-        fun newInstance(item: Planner): PopUpFragment{
+        fun newInstance(item: Planner): PopUpFragment {
             val popUpFragment = PopUpFragment()
             val bundle = Bundle()
             bundle.putInt(GET_STARTING_TIME, item.startTime)

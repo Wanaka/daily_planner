@@ -20,18 +20,23 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
     private val scope = CoroutineScope(coroutineContext)
 
 
-    fun callDummyData(): LiveData<List<Planner>> {
-        return component.addPlannerDummy()
-    }
+//    fun callDummyData(): LiveData<List<Planner>> {
+//        return component.addPlannerDummy()
+//    }
 
     suspend fun sendItemToRepo(item: Planner, context: Context){
         return component.postItemToFiB(item, context)
     }
 
-    suspend fun get(): List<Planner> {
-        return component.get()
+    suspend fun deleteItems(number: String, context: Context) {
+        return component.deleteItems(number, context)
     }
-    suspend fun getDataFromRepo(context: Context) {
+
+//    suspend fun get(): List<Planner> {
+//        return component.get()
+//    }
+
+    suspend fun getDataFromRepo(context: Context): ArrayList<Planner> {
         return component.getDataFromFireStore(context)
     }
 

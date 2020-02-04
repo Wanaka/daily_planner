@@ -19,9 +19,6 @@ class Key constructor(val context: Context){
                 .putString("KEY", UUID.randomUUID().toString())
                 .apply()
         }
-
-        Log.d(",,,", "UUID: ${pref.getString("KEY", "")}")
-
     }
 
     fun getUUID(): String {

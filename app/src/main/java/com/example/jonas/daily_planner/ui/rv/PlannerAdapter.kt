@@ -2,24 +2,21 @@ package com.example.jonas.daily_planner.ui.rv
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
-import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
-import android.widget.Toast
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.model.Planner
-import kotlinx.android.synthetic.main.planner_empty_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.list_item
 
 
-
-class PlannerAdapter(private val items : List<Planner>, private val context: Context, private val mListener: OnItemClickListener?) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
+class PlannerAdapter(
+    private val items: List<Planner>,
+    private val context: Context,
+    private val mListener: OnItemClickListener?
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
 
 
     interface OnItemClickListener {
@@ -50,6 +47,7 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
                     false
                 )
             )
+
             EMPTY_ITEM -> viewHolder = EmptyViewHolder(
                 LayoutInflater.from(context).inflate(
                     R.layout.planner_empty_list_item,
@@ -57,6 +55,7 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
                     false
                 )
             )
+
             else -> viewHolder = WakeUpViewHolder(
                 LayoutInflater.from(context).inflate(
                     R.layout.wake_up_item,
@@ -71,18 +70,19 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
 
     // Binds each item in the ArrayList to a view
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if(getItemViewType(position) == FIRST){
+        if (getItemViewType(position) == FIRST) {
             (holder as WakeUpViewHolder)
         } else if (getItemViewType(position) == ITEM) {
             (holder as ItemViewHolder).itemTitle.text = items[position].title
+            holder.itemSubText.text = items[position].description
             holder.listItem.layoutParams.height *= items[position].duration
         } else {
             (holder as EmptyViewHolder)
             holder.listItem.layoutParams.height *= items[position].duration
             //holder.textt.text_.text = items[position].title
-                holder.listItem.setOnClickListener {
-                    mListener!!.onItemClick(context, items[position], position)
-                }
+            holder.listItem.setOnClickListener {
+                mListener!!.onItemClick(context, items[position], position)
+            }
         }
     }
 
@@ -97,15 +97,15 @@ class PlannerAdapter(private val items : List<Planner>, private val context: Con
     }
 }
 
-class ItemViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     // Holds the TextView that will add each animal to
-    val itemTitle: TextView = view.text_wake_up
+    val itemTitle: TextView = view.title
+    val itemSubText: TextView = view.sub_text
     val listItem: View = view.list_item
 }
 
-class EmptyViewHolder (view: View) : RecyclerView.ViewHolder(view){
+class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val listItem: View = view.list_item
-    //val textt: View = view.text_
-
 }
-class WakeUpViewHolder (view: View) : RecyclerView.ViewHolder(view)
+
+class WakeUpViewHolder(view: View) : RecyclerView.ViewHolder(view)
