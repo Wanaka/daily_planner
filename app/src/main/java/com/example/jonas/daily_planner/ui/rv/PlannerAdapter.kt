@@ -8,15 +8,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.model.Planner
+import kotlinx.android.synthetic.main.planner_empty_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.list_item
+import kotlinx.android.synthetic.main.planner_list_item.view.title
+import kotlinx.android.synthetic.main.wake_up_item.view.*
 
 
 class PlannerAdapter(
     private val items: List<Planner>,
     private val context: Context,
     private val mListener: OnItemClickListener?
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), View.OnClickListener {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
     interface OnItemClickListener {
@@ -75,19 +78,22 @@ class PlannerAdapter(
         } else if (getItemViewType(position) == ITEM) {
             (holder as ItemViewHolder).itemTitle.text = items[position].title
             holder.itemSubText.text = items[position].description
+            holder.time.text = items[position].startTime.toString()
             holder.listItem.layoutParams.height *= items[position].duration
+
+            holder.listItem.setOnClickListener {
+                mListener!!.onItemClick(context, items[position], position)
+            }
         } else {
             (holder as EmptyViewHolder)
             holder.listItem.layoutParams.height *= items[position].duration
-            //holder.textt.text_.text = items[position].title
+            holder.timeEmpty.text = items[position].startTime.toString()
+            if( items[position].startTime == 999) holder.timeEmpty.visibility = View.GONE
+
             holder.listItem.setOnClickListener {
                 mListener!!.onItemClick(context, items[position], position)
             }
         }
-    }
-
-    override fun onClick(p0: View?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     companion object {
@@ -98,14 +104,15 @@ class PlannerAdapter(
 }
 
 class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    // Holds the TextView that will add each animal to
     val itemTitle: TextView = view.title
     val itemSubText: TextView = view.sub_text
+    val time: TextView = view.time
     val listItem: View = view.list_item
 }
 
 class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val listItem: View = view.list_item
+    val timeEmpty: TextView = view.timeEmpty
 }
 
 class WakeUpViewHolder(view: View) : RecyclerView.ViewHolder(view)
