@@ -16,6 +16,7 @@ import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
+import com.example.jonas.daily_planner.util.Date
 import com.example.jonas.daily_planner.util.Key
 import kotlinx.android.synthetic.main.fragment_planer_list.*
 import kotlinx.coroutines.CoroutineScope
@@ -38,7 +39,7 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     private lateinit var list: ArrayList<Planner>
     var item: Planner? = null
-
+//    var activeDate: String? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -55,6 +56,13 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
     ): View? {
 
         item = arguments?.get(KEY_POP_FRAGMENT_DATA) as? Planner
+        if(arguments?.get("DATE") as? String == null){
+            Log.d(",,,", "date: ${Date()}")
+
+        } else{
+            Log.d(",,,", "date: ${arguments?.get("DATE") as? String}")
+
+        }
 
         if (item != null) sendToFiB(item!!)
 
