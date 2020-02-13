@@ -10,20 +10,20 @@ import kotlin.collections.ArrayList
 
 class Repository @Inject constructor(var fireStoreService: FireStoreService) {
 
-    suspend fun postItemToFiB(item: Planner, context: Context) {
-        return fireStoreService.postToFireStore(item, context)
+    suspend fun postItemToFiB(item: Planner, context: Context, activeDate: String) {
+        return fireStoreService.postToFireStore(item, context, activeDate)
     }
 
-    suspend fun deleteItems(number: String, context: Context) {
-        return fireStoreService.deleteItems(number, context)
+    suspend fun deleteItems(number: String, context: Context, activeDate: String) {
+        return fireStoreService.deleteItems(number, context, activeDate)
     }
 
 //    fun get(): List<Planner>{
 //        return fireStoreService.get()
 //    }
 
-    suspend fun getDataFromFireStore(context: Context): ArrayList<Planner> {
-        return fireStoreService.getDataFromFireStore(context)
+    suspend fun getDataFromFireStore(context: Context, getDate:String): ArrayList<Planner> {
+        return fireStoreService.getDataFromFireStore(context, getDate)
     }
 
     private fun getDefaultPlanner(startTime: Int, duration: Int, type: Int, distance: Int): Planner{

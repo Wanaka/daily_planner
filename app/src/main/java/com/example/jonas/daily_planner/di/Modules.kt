@@ -1,11 +1,9 @@
 package com.example.jonas.daily_planner.di
 
-import android.content.Context
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.repository.FireStoreService
 import com.example.jonas.daily_planner.repository.Repository
-import com.example.jonas.daily_planner.util.Date
-import com.example.jonas.daily_planner.util.Key
+import com.example.jonas.daily_planner.util.SharedPreferenceDate
 import dagger.Module
 import dagger.Provides
 
@@ -19,21 +17,16 @@ class Modules {
 
     @Provides
     open fun repository(): Repository {
-        return Repository(FireStoreService(Date()))
+        return Repository(FireStoreService())
     }
 
     @Provides
     open fun fireStoreService(): FireStoreService {
-        return FireStoreService(Date())
+        return FireStoreService()
     }
 
     @Provides
-    open fun date(): Date {
-        return Date()
+    open fun sharedPreferenceDate(): SharedPreferenceDate {
+        return SharedPreferenceDate()
     }
-
-//    @Provides
-//    open fun key(): Key {
-//        return Key()
-//    }
 }

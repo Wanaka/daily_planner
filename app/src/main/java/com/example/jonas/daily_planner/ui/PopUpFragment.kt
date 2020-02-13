@@ -12,6 +12,11 @@ import kotlinx.android.synthetic.main.item_popup.*
 
 class PopUpFragment : DialogFragment() {
 
+    interface Communicator {
+        fun passDataFromPopFragmentToPlannerFragment(item: Planner)
+    }
+
+
     lateinit var communicator: Communicator
     private var start = 0
     private var hour = 0
@@ -89,9 +94,6 @@ class PopUpFragment : DialogFragment() {
         close.setOnClickListener { dismiss() }
     }
 
-    interface Communicator {
-        fun passDataFromPopFragmentToPlannerFragment(item: Planner)
-    }
 
     companion object {
         const val GET_TITLE = "key_title"

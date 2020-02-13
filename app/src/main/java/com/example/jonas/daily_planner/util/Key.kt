@@ -10,7 +10,6 @@ class Key constructor(val context: Context){
     private val pref = PreferenceManager.getDefaultSharedPreferences(context)
 
     fun UUID(){
-
         if(!pref.contains("KEY")){
 
             val editor = pref.edit()
@@ -22,8 +21,6 @@ class Key constructor(val context: Context){
     }
 
     fun getUUID(): String {
-        Log.d(",,,", "getUUID: ${pref.getString("KEY", "")}")
-
         val pref = PreferenceManager.getDefaultSharedPreferences(context)
         return pref.getString("KEY", "")!!
     }

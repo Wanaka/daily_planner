@@ -1,6 +1,5 @@
 package com.example.jonas.daily_planner.util
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
@@ -24,7 +23,12 @@ class TransformList {
 
                     itemList.add(
                         e,
-                        getDefaultPlanner(e + wakeupTime - 1, 1, -1, (sleepTime - wakeupTime) - e + 1)
+                        getDefaultPlanner(
+                            e + wakeupTime - 1,
+                            1,
+                            -1,
+                            (sleepTime - wakeupTime) - e + 1
+                        )
                     )
                 } else {
                     itemList.add(e, getDefaultPlanner(e + wakeupTime - 1, 1, -1, 0))

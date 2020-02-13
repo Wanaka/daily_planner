@@ -16,8 +16,9 @@ import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
-import com.example.jonas.daily_planner.util.Date
+import com.example.jonas.daily_planner.ui.rv.PlannerAdapter.*
 import com.example.jonas.daily_planner.util.Key
+import com.example.jonas.daily_planner.util.SharedPreferenceDate
 import kotlinx.android.synthetic.main.fragment_planer_list.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
+class PlannerListFragment : BaseFragment(), OnItemClickListener {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -37,13 +38,16 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
     @Inject
     lateinit var component: NavigatorImpl
 
+    @Inject
+    lateinit var sharedPref: SharedPreferenceDate
+
     private lateinit var list: ArrayList<Planner>
     var item: Planner? = null
-//    var activeDate: String? = null
+    private lateinit var getDate: String
+
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-
         DaggerAppComponent.create().inject(this)
         plannerViewModel = ViewModelProviders.of(this, factory).get(PlannerViewModel::class.java)
         Key(context!!).UUID()
@@ -54,17 +58,12 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        getDate = sharedPref.getDate(context!!)
         item = arguments?.get(KEY_POP_FRAGMENT_DATA) as? Planner
-        if(arguments?.get("DATE") as? String == null){
-            Log.d(",,,", "date: ${Date()}")
 
-        } else{
-            Log.d(",,,", "date: ${arguments?.get("DATE") as? String}")
-
-        }
-
-        if (item != null) sendToFiB(item!!)
+        //send date to firestore
+        if (item != null) sendToFireStore(item!!)
+        getList()
 
         return inflater.inflate(R.layout.fragment_planer_list, container, false)
     }
@@ -77,7 +76,7 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
 
     private fun getList() {
         CoroutineScope(IO).launch {
-            list = plannerViewModel.getDataFromRepo(context!!)
+            list = plannerViewModel.getDataFromRepo(context!!, getDate)
 
             withContext(Main) {
                 itemRecyclerView.apply {
@@ -88,10 +87,10 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
         }
     }
 
-    private fun sendToFiB(item: Planner) {
+    private fun sendToFireStore(item: Planner) {
         CoroutineScope(IO).launch {
             try {
-                plannerViewModel.sendItemToRepo(item, context!!)
+                plannerViewModel.sendItemToRepo(item, context!!, getDate)
             } catch (e: Error) {
                 Log.d("TAG", "Error: $e")
             }
@@ -118,7 +117,8 @@ class PlannerListFragment : BaseFragment(), PlannerAdapter.OnItemClickListener {
                     try {
                         plannerViewModel.deleteItems(
                             list[viewHolder.adapterPosition].startTime.toString(),
-                            context!!
+                            context!!,
+                            getDate
                         )
                     } catch (e: Error) {
                     }

@@ -12,5 +12,4 @@ class NavigatorImpl @Inject constructor() : Navigator {
         var popupDialog = PopUpFragment.newInstance(item)
         popupDialog.show(fm, "popup_fragment")
     }
-
 }

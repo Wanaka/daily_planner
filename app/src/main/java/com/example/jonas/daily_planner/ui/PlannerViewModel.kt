@@ -24,20 +24,20 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
 //        return component.addPlannerDummy()
 //    }
 
-    suspend fun sendItemToRepo(item: Planner, context: Context){
-        return component.postItemToFiB(item, context)
+    suspend fun sendItemToRepo(item: Planner, context: Context, activeDate: String){
+        return component.postItemToFiB(item, context, activeDate)
     }
 
-    suspend fun deleteItems(number: String, context: Context) {
-        return component.deleteItems(number, context)
+    suspend fun deleteItems(number: String, context: Context, activeDate: String) {
+        return component.deleteItems(number, context, activeDate)
     }
 
 //    suspend fun get(): List<Planner> {
 //        return component.get()
 //    }
 
-    suspend fun getDataFromRepo(context: Context): ArrayList<Planner> {
-        return component.getDataFromFireStore(context)
+    suspend fun getDataFromRepo(context: Context, getDate: String): ArrayList<Planner> {
+        return component.getDataFromFireStore(context, getDate)
     }
 
     fun callWakeUpTime(): LiveData<List<Int>>{
