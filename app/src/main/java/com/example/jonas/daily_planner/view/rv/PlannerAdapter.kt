@@ -1,4 +1,4 @@
-package com.example.jonas.daily_planner.ui.rv
+package com.example.jonas.daily_planner.view.rv
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.planner_empty_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.*
 import kotlinx.android.synthetic.main.planner_list_item.view.list_item
 import kotlinx.android.synthetic.main.planner_list_item.view.title
-import kotlinx.android.synthetic.main.wake_up_item.view.*
 
 
 class PlannerAdapter(

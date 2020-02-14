@@ -2,9 +2,9 @@ package com.example.jonas.daily_planner.di
 
 import com.example.jonas.daily_planner.repository.FireStoreService
 import com.example.jonas.daily_planner.repository.Repository
-import com.example.jonas.daily_planner.ui.PlannerActivity
-import com.example.jonas.daily_planner.ui.PlannerListFragment
-import com.example.jonas.daily_planner.ui.PlannerViewModel
+import com.example.jonas.daily_planner.view.PlannerActivity
+import com.example.jonas.daily_planner.view.PlannerListFragment
+import com.example.jonas.daily_planner.view.PlannerViewModel
 import dagger.Component
 
 @Component(modules = [ViewModelFactoryModule::class, Modules::class])

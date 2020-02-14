@@ -1,4 +1,4 @@
-package com.example.jonas.daily_planner.ui.rv
+package com.example.jonas.daily_planner.view.rv
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.jonas.daily_planner.R
-import com.example.jonas.daily_planner.model.Planner
 import kotlinx.android.synthetic.main.number_item.view.*
-import kotlinx.android.synthetic.main.planner_list_item.view.*
 
 class TimeAdapter(private val items : List<Int>, private val context: Context) : RecyclerView.Adapter<TimeViewHolder>() {
 

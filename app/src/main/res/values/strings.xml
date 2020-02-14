@@ -16,4 +16,8 @@
     <string name="sub_title">A small description</string>
     <string name="title">Your event\'s name</string>
     <string name="close_x">X</string>
+    <string name="calendar">Calendar</string>
+    <string name="edit_hour_range">Edit wake hours</string>
+    <string name="start_the_day">Start the day</string>
+    <string name="end_the_day">End the day</string>
 </resources>

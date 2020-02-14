@@ -1,11 +1,15 @@
-package com.example.jonas.daily_planner.ui
+package com.example.jonas.daily_planner.view
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.base.BaseActivity
+import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.util.SharedPreferenceDate
@@ -31,6 +35,8 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_planner)
         setSupportActionBar(custom_toolbar)
+        DaggerAppComponent.create().inject(this)
+
         sharedPref = SharedPreferenceDate()
 
 
@@ -65,7 +71,7 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
         sharedPref.saveDate(this, "$dayDate$month$year")
     }
 
-    fun updatePlannerListFragment() {
+    private fun updatePlannerListFragment() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, PlannerListFragment())
             .commit()
@@ -107,6 +113,12 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
                 ).show()
                 return true
             }
+
+            R.id.action_set_hour_range -> {
+                component.openHourPopup(supportFragmentManager)
+                return true
+            }
+
         }
         return super.onOptionsItemSelected(item)
     }

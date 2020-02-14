@@ -4,7 +4,12 @@
     <item
             android:id="@+id/action_calendar"
             android:icon="@drawable/ic_calendar"
-            android:title="Cut"
+            android:title="@string/calendar"
             app:showAsAction="ifRoom|withText" />
-    />
+
+    <item
+            android:id="@+id/action_set_hour_range"
+            android:icon="@drawable/ic_hour"
+            android:title="@string/edit_hour_range"
+            app:showAsAction="withText" />
 </menu>

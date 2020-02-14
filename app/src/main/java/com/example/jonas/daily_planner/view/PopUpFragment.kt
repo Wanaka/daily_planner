@@ -1,4 +1,4 @@
-package com.example.jonas.daily_planner.ui
+package com.example.jonas.daily_planner.view
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment

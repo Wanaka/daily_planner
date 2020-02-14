@@ -1,4 +1,4 @@
-package com.example.jonas.daily_planner.ui
+package com.example.jonas.daily_planner.view
 
 import androidx.lifecycle.*
 import android.content.Context
@@ -15,8 +15,8 @@ import com.example.jonas.daily_planner.base.BaseFragment
 import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
-import com.example.jonas.daily_planner.ui.rv.PlannerAdapter
-import com.example.jonas.daily_planner.ui.rv.PlannerAdapter.*
+import com.example.jonas.daily_planner.view.rv.PlannerAdapter
+import com.example.jonas.daily_planner.view.rv.PlannerAdapter.*
 import com.example.jonas.daily_planner.util.Key
 import com.example.jonas.daily_planner.util.SharedPreferenceDate
 import kotlinx.android.synthetic.main.fragment_planer_list.*

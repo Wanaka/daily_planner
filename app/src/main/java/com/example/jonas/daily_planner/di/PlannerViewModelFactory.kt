@@ -2,7 +2,7 @@ package com.example.jonas.daily_planner.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.jonas.daily_planner.ui.PlannerViewModel
+import com.example.jonas.daily_planner.view.PlannerViewModel
 import javax.inject.Inject
 import javax.inject.Provider
 
