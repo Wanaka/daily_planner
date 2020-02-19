@@ -14,6 +14,7 @@ import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.base.BaseFragment
 import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.view.rv.PlannerAdapter
 import com.example.jonas.daily_planner.view.rv.PlannerAdapter.*
@@ -43,6 +44,7 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
 
     private lateinit var list: ArrayList<Planner>
     var item: Planner? = null
+    var wakeHours: WakeHoursModel? = null
     private lateinit var getDate: String
 
 
@@ -60,9 +62,11 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
     ): View? {
         getDate = sharedPref.getDate(context!!)
         item = arguments?.get(KEY_POP_FRAGMENT_DATA) as? Planner
+        wakeHours =  arguments?.get("Time_Picker_Data") as? WakeHoursModel
 
         //send date to firestore
         if (item != null) sendToFireStore(item!!)
+        if (wakeHours != null) sendWakeHours(wakeHours!!)
         getList()
 
         return inflater.inflate(R.layout.fragment_planer_list, container, false)
@@ -96,6 +100,17 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
             }
         }
     }
+
+    private fun sendWakeHours(wakeHours: WakeHoursModel) {
+        CoroutineScope(IO).launch {
+            try {
+                plannerViewModel.sendwakeHoursToRepo(wakeHours, context!!, getDate)
+            } catch (e: Error) {
+                Log.d("TAG", "Error: $e")
+            }
+        }
+    }
+
 
     override fun onItemClick(context: Context, item: Planner, position: Int) {
         component.newEvent(context, fragmentManager!!, item)

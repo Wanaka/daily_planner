@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -12,6 +13,11 @@ class Repository @Inject constructor(var fireStoreService: FireStoreService) {
 
     suspend fun postItemToFiB(item: Planner, context: Context, activeDate: String) {
         return fireStoreService.postToFireStore(item, context, activeDate)
+    }
+
+    suspend fun postwakeHoursToFiB(wakeHours: WakeHoursModel, context: Context, activeDate: String) {
+        return fireStoreService.postWakeHours(wakeHours, context, activeDate)
+
     }
 
     suspend fun deleteItems(number: String, context: Context, activeDate: String) {

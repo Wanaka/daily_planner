@@ -3,6 +3,7 @@ package com.example.jonas.daily_planner.repository
 import android.content.Context
 import android.util.Log
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 import com.example.jonas.daily_planner.util.Key
 import com.example.jonas.daily_planner.util.TransformList
 import com.google.android.gms.tasks.Tasks
@@ -17,6 +18,14 @@ class FireStoreService @Inject constructor() {
         db.collection("users").document(Key(context).getUUID()).collection(activeDate)
             .document(item.startTime.toString())
             .set(item)
+            .addOnSuccessListener { Log.d(",,,", "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(",,,", "Error writing document", e) }
+    }
+
+    fun postWakeHours(wakeHours: WakeHoursModel, context: Context, activeDate: String) {
+        db.collection("users").document(Key(context).getUUID()).collection(activeDate)
+            .document("wakeHours")
+            .set(wakeHours)
             .addOnSuccessListener { Log.d(",,,", "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(",,,", "Error writing document", e) }
     }
@@ -40,17 +49,18 @@ class FireStoreService @Inject constructor() {
 
             if (document.documents != null) {
                 for (i in document.documents) {
-                    plannerList.add(
-                        Planner(
-                            i.get("title").toString(),
-                            i.get("description").toString(),
-                            i.get("startTime").toString().toInt(),
-                            i.get("duration").toString().toInt(),
-                            i.get("itemType").toString().toInt(),
-                            i.get("distanceToClosestFilledItem").toString().toInt(),
-                            i.get("isNotificationEnabled").toString().toBoolean()
+                    Log.d(",,,", "Getloist")
+                        plannerList.add(
+                            Planner(
+                                i.get("title").toString(),
+                                i.get("description").toString(),
+                                i.get("startTime").toString().toInt(),
+                                i.get("duration").toString().toInt(),
+                                i.get("itemType").toString().toInt(),
+                                i.get("distanceToClosestFilledItem").toString().toInt(),
+                                i.get("isNotificationEnabled").toString().toBoolean()
+                            )
                         )
-                    )
                 }
             }
             var t = TransformList()

@@ -3,6 +3,7 @@ package com.example.jonas.daily_planner.view
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -11,15 +12,18 @@ import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.base.BaseActivity
 import com.example.jonas.daily_planner.di.DaggerAppComponent
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.util.SharedPreferenceDate
+import com.example.jonas.daily_planner.view.PopUpFragment.*
+import com.example.jonas.daily_planner.view.TimePickerFragment.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
 import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
+class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
 
     @Inject
     lateinit var component: NavigatorImpl
@@ -93,6 +97,17 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
             .commit()
     }
 
+    override fun timePickerData(q: WakeHoursModel) {
+        val bundle = Bundle()
+        bundle.putSerializable("Time_Picker_Data", q as Serializable)
+
+        val passData = PlannerListFragment()
+        passData.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, passData)
+            .commit()
+    }
 
     // Menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -127,4 +142,6 @@ class PlannerActivity : BaseActivity(), PopUpFragment.Communicator {
     companion object {
         const val KEY_POP_FRAGMENT_DATA = "KEY_POP_FRAGMENT_DATA"
     }
+
+
 }

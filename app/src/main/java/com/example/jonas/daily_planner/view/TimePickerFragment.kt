@@ -9,12 +9,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.jonas.daily_planner.R
-import kotlinx.android.synthetic.main.hour_popup.*
+import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
+import kotlinx.android.synthetic.main.time_picker_popup.*
 import java.util.*
 
 
 class TimePickerFragment : DialogFragment() {
 
+    interface TimePickerInterface {
+        fun timePickerData(q: WakeHoursModel)
+    }
+
+    lateinit var communicator: TimePickerInterface
     var hour = Calendar.getInstance().get(Calendar.HOUR)
 
     override fun onCreateView(
@@ -22,7 +29,9 @@ class TimePickerFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.hour_popup, container, false)
+        communicator = activity as TimePickerInterface
+
+        return inflater.inflate(R.layout.time_picker_popup, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,6 +46,12 @@ class TimePickerFragment : DialogFragment() {
         buttonStart.setOnClickListener { getTime(true) }
         buttonEnd.setOnClickListener { getTime(false) }
         buttonSaveTime.setOnClickListener {
+            communicator.timePickerData(
+                WakeHoursModel(
+                    buttonStart.text.toString(),
+                    buttonEnd.text.toString()
+                )
+            )
             Toast.makeText(context, "Time saved", Toast.LENGTH_SHORT).show()
             dismiss()
         }

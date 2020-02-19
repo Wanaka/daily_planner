@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 import com.example.jonas.daily_planner.repository.Repository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,6 +27,11 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
 
     suspend fun sendItemToRepo(item: Planner, context: Context, activeDate: String){
         return component.postItemToFiB(item, context, activeDate)
+    }
+
+    suspend fun sendwakeHoursToRepo(wakeHours: WakeHoursModel, context: Context, activeDate: String) {
+        return component.postwakeHoursToFiB(wakeHours, context, activeDate)
+
     }
 
     suspend fun deleteItems(number: String, context: Context, activeDate: String) {
