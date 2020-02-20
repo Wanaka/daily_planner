@@ -34,6 +34,7 @@ class PlannerAdapter(
         return when {
             items[position].itemType == 0 -> FIRST
             items[position].itemType == -1 -> EMPTY_ITEM
+            items[position].itemType == -2 -> LAST_ITEM
             else -> ITEM
         }
     }
@@ -51,6 +52,14 @@ class PlannerAdapter(
             )
 
             EMPTY_ITEM -> viewHolder = EmptyViewHolder(
+                LayoutInflater.from(context).inflate(
+                    R.layout.planner_empty_list_item,
+                    parent,
+                    false
+                )
+            )
+
+            LAST_ITEM -> viewHolder = EmptyViewHolder(
                 LayoutInflater.from(context).inflate(
                     R.layout.planner_empty_list_item,
                     parent,
@@ -83,22 +92,28 @@ class PlannerAdapter(
             holder.listItem.setOnClickListener {
                 mListener!!.onItemClick(context, items[position], position)
             }
+        } else if (getItemViewType(position) == LAST_ITEM) {
+            (holder as EmptyViewHolder)
+            holder.timeEmpty.visibility = View.GONE
+            holder.listItem.visibility = View.GONE
         } else {
             (holder as EmptyViewHolder)
             holder.listItem.layoutParams.height *= items[position].duration
             holder.timeEmpty.text = items[position].startTime.toString()
-            if( items[position].startTime == 999) holder.timeEmpty.visibility = View.GONE
+            if (items[position].startTime == 999) holder.timeEmpty.visibility = View.GONE
 
             holder.listItem.setOnClickListener {
                 mListener!!.onItemClick(context, items[position], position)
             }
         }
+
     }
 
     companion object {
         private const val FIRST = 0
         private const val EMPTY_ITEM = 1
-        private const val ITEM = 2
+        private const val LAST_ITEM = 2
+        private const val ITEM = 3
     }
 }
 
