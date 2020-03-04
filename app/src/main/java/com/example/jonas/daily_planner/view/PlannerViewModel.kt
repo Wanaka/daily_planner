@@ -31,7 +31,10 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
 
     suspend fun sendwakeHoursToRepo(wakeHours: WakeHoursModel, context: Context, activeDate: String) {
         return component.postwakeHoursToFiB(wakeHours, context, activeDate)
+    }
 
+    suspend fun getwakeHoursToRepo(context: Context, activeDate: String): WakeHoursModel {
+        return component.getwakeHoursToFiB(context, activeDate)
     }
 
     suspend fun deleteItems(number: String, context: Context, activeDate: String) {
@@ -42,8 +45,8 @@ class PlannerViewModel @Inject constructor(var component: Repository): ViewModel
 //        return component.get()
 //    }
 
-    suspend fun getDataFromRepo(context: Context, getDate: String): ArrayList<Planner> {
-        return component.getDataFromFireStore(context, getDate)
+    suspend fun getDataFromRepo(context: Context, getDate: String, wakeHours: WakeHoursModel): ArrayList<Planner> {
+        return component.getDataFromFireStore(context, getDate, wakeHours)
     }
 
     fun callWakeUpTime(): LiveData<List<Int>>{

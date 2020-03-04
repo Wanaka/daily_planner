@@ -15,6 +15,7 @@ import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.model.WakeHoursModel
 import com.example.jonas.daily_planner.navigator.NavigatorImpl
 import com.example.jonas.daily_planner.util.SharedPreferenceDate
+import com.example.jonas.daily_planner.view.PlannerListFragment.*
 import com.example.jonas.daily_planner.view.PopUpFragment.*
 import com.example.jonas.daily_planner.view.TimePickerFragment.*
 import kotlinx.android.synthetic.main.custom_toolbar.*
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
+class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface, SendWakeHoursToActivity {
 
     @Inject
     lateinit var component: NavigatorImpl
@@ -34,6 +35,7 @@ class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
     private var cal: Calendar = Calendar.getInstance()
     private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
 
+    private var wakeHours: WakeHoursModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,6 +111,11 @@ class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
             .commit()
     }
 
+    override fun sendWakeHours(w: WakeHoursModel) {
+        Log.d(",,,", "send wakehours in activity!!!")
+        wakeHours = w
+    }
+
     // Menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
@@ -130,7 +137,7 @@ class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
             }
 
             R.id.action_set_hour_range -> {
-                component.openHourPopup(supportFragmentManager)
+                component.openHourPopup(wakeHours!!, supportFragmentManager)
                 return true
             }
 
@@ -142,6 +149,4 @@ class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface {
     companion object {
         const val KEY_POP_FRAGMENT_DATA = "KEY_POP_FRAGMENT_DATA"
     }
-
-
 }

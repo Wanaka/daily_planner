@@ -17,7 +17,10 @@ class Repository @Inject constructor(var fireStoreService: FireStoreService) {
 
     suspend fun postwakeHoursToFiB(wakeHours: WakeHoursModel, context: Context, activeDate: String) {
         return fireStoreService.postWakeHours(wakeHours, context, activeDate)
+    }
 
+    suspend fun getwakeHoursToFiB(context: Context, activeDate: String): WakeHoursModel {
+        return fireStoreService.getWakeHours(context, activeDate)
     }
 
     suspend fun deleteItems(number: String, context: Context, activeDate: String) {
@@ -28,8 +31,8 @@ class Repository @Inject constructor(var fireStoreService: FireStoreService) {
 //        return fireStoreService.get()
 //    }
 
-    suspend fun getDataFromFireStore(context: Context, getDate:String): ArrayList<Planner> {
-        return fireStoreService.getDataFromFireStore(context, getDate)
+    suspend fun getDataFromFireStore(context: Context, getDate:String, wakeHours: WakeHoursModel): ArrayList<Planner> {
+        return fireStoreService.getDataFromFireStore(context, getDate, wakeHours)
     }
 
     private fun getDefaultPlanner(startTime: Int, duration: Int, type: Int, distance: Int): Planner{

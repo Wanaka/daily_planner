@@ -11,14 +11,14 @@ import androidx.fragment.app.DialogFragment
 import com.example.jonas.daily_planner.R
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.model.WakeHoursModel
+import com.example.jonas.daily_planner.view.PlannerActivity.*
 import kotlinx.android.synthetic.main.time_picker_popup.*
 import java.util.*
-
 
 class TimePickerFragment : DialogFragment() {
 
     interface TimePickerInterface {
-        fun timePickerData(q: WakeHoursModel)
+        fun timePickerData(wakeHours: WakeHoursModel)
     }
 
     lateinit var communicator: TimePickerInterface
@@ -37,11 +37,14 @@ class TimePickerFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         init()
+
+//        title = arguments?.get(PopUpFragment.GET_TITLE) as String
+
     }
 
     private fun init() {
-        buttonStart.text = hour.toString()
-        buttonEnd.text = (hour + 1).toString()
+        buttonStart.text = arguments?.get(GET_START_HOUR) as String
+        buttonEnd.text = arguments?.get(GET_END_HOUR) as String
 
         buttonStart.setOnClickListener { getTime(true) }
         buttonEnd.setOnClickListener { getTime(false) }
@@ -71,8 +74,16 @@ class TimePickerFragment : DialogFragment() {
     }
 
     companion object {
-        fun newInstance(): TimePickerFragment {
-            return TimePickerFragment()
+        const val GET_START_HOUR = "get_start_hour"
+        const val GET_END_HOUR = "get_end_hour"
+
+        fun newInstance(wakeHours: WakeHoursModel): TimePickerFragment {
+            val timePickerFragment = TimePickerFragment()
+            val bundle = Bundle()
+            bundle.putString(GET_START_HOUR, wakeHours.startTime)
+            bundle.putString(GET_END_HOUR, wakeHours.endTime)
+            timePickerFragment.arguments = bundle
+            return timePickerFragment
         }
     }
 }

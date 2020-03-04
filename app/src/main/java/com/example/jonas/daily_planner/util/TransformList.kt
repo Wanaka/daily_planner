@@ -4,18 +4,21 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
+import com.example.jonas.daily_planner.model.WakeHoursModel
 
 class TransformList {
     var wakeupTime = 0
     var sleepTime = 24
 
     var myTimeStart = 8
-    var myTimeEnd = 15
+    var myTimeEnd = 10
 
-    fun addPlannerDummy(list: ArrayList<Planner>): ArrayList<Planner> {
+    fun addPlannerDummy(list: ArrayList<Planner>, wakeHours: WakeHoursModel): ArrayList<Planner> {
 
         var itemList = arrayListOf<Planner>()
-
+        myTimeStart = wakeHours.startTime.toInt()
+        myTimeEnd = wakeHours.endTime.toInt()
+        Log.d(",,,", "myTimeStart: ${myTimeStart}")
 
         //Start out with an entire collapsed list and then add empty spaces onto that list depending on the hours chosen.
         var e = 0

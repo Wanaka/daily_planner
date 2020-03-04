@@ -21,14 +21,16 @@ import com.example.jonas.daily_planner.view.rv.PlannerAdapter.*
 import com.example.jonas.daily_planner.util.Key
 import com.example.jonas.daily_planner.util.SharedPreferenceDate
 import kotlinx.android.synthetic.main.fragment_planer_list.*
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class PlannerListFragment : BaseFragment(), OnItemClickListener {
+
+    interface SendWakeHoursToActivity {
+        fun sendWakeHours(wakeHours: WakeHoursModel)
+    }
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
@@ -41,6 +43,8 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
 
     @Inject
     lateinit var sharedPref: SharedPreferenceDate
+
+    lateinit var communicator: SendWakeHoursToActivity
 
     private lateinit var list: ArrayList<Planner>
     var item: Planner? = null
@@ -62,7 +66,9 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
     ): View? {
         getDate = sharedPref.getDate(context!!)
         item = arguments?.get(KEY_POP_FRAGMENT_DATA) as? Planner
-        wakeHours =  arguments?.get("Time_Picker_Data") as? WakeHoursModel
+        wakeHours = arguments?.get("Time_Picker_Data") as? WakeHoursModel
+        communicator = activity as SendWakeHoursToActivity
+
 
         //send date to firestore
         if (item != null) sendToFireStore(item!!)
@@ -80,7 +86,18 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
 
     private fun getList() {
         CoroutineScope(IO).launch {
-            list = plannerViewModel.getDataFromRepo(context!!, getDate)
+            var hours = async { plannerViewModel.getwakeHoursToRepo(context!!, getDate) }
+            var dataResponse: WakeHoursModel?
+
+            if (hours.await().let { dataResponse = it; true }) {
+                sendWakeHours(dataResponse!!.startTime, dataResponse!!.endTime)
+                list = if (dataResponse!!.startTime.isNotBlank()) {
+                    getDataFromRepo(dataResponse!!.startTime, dataResponse!!.endTime)
+                } else {
+                    sendWakeHours("7", "22")
+                    getDataFromRepo("7", "22")
+                }
+            }
 
             withContext(Main) {
                 itemRecyclerView.apply {
@@ -89,6 +106,23 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
                 }
             }
         }
+    }
+
+    private fun sendWakeHours(startTime: String, endTime: String) {
+        communicator.sendWakeHours(
+            WakeHoursModel(
+                startTime,
+                endTime
+            )
+        )
+    }
+
+    private suspend fun getDataFromRepo(startTime: String, endTime: String): ArrayList<Planner> {
+        return plannerViewModel.getDataFromRepo(
+            context!!,
+            getDate,
+            WakeHoursModel(startTime, endTime)
+        )
     }
 
     private fun sendToFireStore(item: Planner) {
