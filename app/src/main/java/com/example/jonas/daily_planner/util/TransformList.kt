@@ -1,8 +1,6 @@
 package com.example.jonas.daily_planner.util
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.jonas.daily_planner.model.Planner
 import com.example.jonas.daily_planner.model.WakeHoursModel
 
@@ -10,15 +8,18 @@ class TransformList {
     var wakeupTime = 0
     var sleepTime = 24
 
-    var myTimeStart = 8
-    var myTimeEnd = 10
+    var myTimeStart = 0
+    var myTimeEnd = 24
+    var lowestTime = 0
+    var highestTime = 0
 
     fun addPlannerDummy(list: ArrayList<Planner>, wakeHours: WakeHoursModel): ArrayList<Planner> {
 
         var itemList = arrayListOf<Planner>()
         myTimeStart = wakeHours.startTime.toInt()
         myTimeEnd = wakeHours.endTime.toInt()
-        Log.d(",,,", "myTimeStart: ${myTimeStart}")
+        lowestTime = myTimeStart
+        highestTime = myTimeEnd
 
         //Start out with an entire collapsed list and then add empty spaces onto that list depending on the hours chosen.
         var e = 0
@@ -53,34 +54,24 @@ class TransformList {
             myTimeStart++
         }
 
-        //Default list with empty items 0-24
-//        var e = 0
-//        while (e <= sleepTime - wakeupTime) {
-//
-//            if (e == 0) {
-//                itemList.add(e, getDefaultPlanner(e, 1, 0, 0))
-//            } else {
-//                if (list.isNullOrEmpty()) {
-//
-//                    itemList.add(
-//                        e,
-//                        getDefaultPlanner(
-//                            e + wakeupTime - 1,
-//                            1,
-//                            -1,
-//                            (sleepTime - wakeupTime) - e + 1
-//                        )
-//                    )
-//                }
-//                else {
-//                    itemList.add(e, getDefaultPlanner(e + wakeupTime - 1, 1, -1, 0))
-//                }
-//            }
-//
-//            e++
-//        }
+        //räkna igenom listan och placera in de nya Planner objects som är mindre än starttime
+        var ll = 0
+        while (ll < list.size) {
+            if (list[ll].startTime < lowestTime || list[ll].startTime >= highestTime) {
+                list[ll] = Planner(
+                    list[ll].title,
+                    list[ll].description,
+                    list[ll].startTime,
+                    list[ll].duration,
+                    5,
+                    list[ll].distanceToClosestFilledItem,
+                    false
+                )
+            }
+            ll++
+        }
 
-        // An invisible list item is needed otherwise the distance doesnt work properly
+        // An invisible list item is needed otherwise the distance doesn't work properly
         list.add(Planner("", "", myTimeEnd + 1, 1, -2, 0, false))
 
         //Add items from firestore db
@@ -89,6 +80,7 @@ class TransformList {
             var t = 0
             while (t < list.size) {
                 if (calc()[m] == list[t].startTime) {
+
                     //add item to RV
                     itemList[m] = list[t]
 
@@ -104,7 +96,7 @@ class TransformList {
             m++
         }
 
-
+        // för varje positon i listan som är empty, kolla avstånd till närmsta filled item och ta countsen och spara de till planner objects
         var dummyStartTime: Int
         var biggestDummy: Int = -1
 
@@ -128,33 +120,6 @@ class TransformList {
             }
         }
 
-        // för varje positon i listan som är empty, kolla avstånd till närmsta filled item och ta countsen och spara de till planner objects
-//        if (!list.isNullOrEmpty()) {
-//            var dummyStartTime: Int
-//            var biggestDummy: Int = -1
-//
-//            for (i in itemList) { //räknar igenom HELA listan, även collapsed items
-//                for (j in list) {
-//                    dummyStartTime = j.startTime
-//
-//
-//                    if (biggestDummy < j.startTime) {
-//                        biggestDummy = j.startTime
-//                    }
-//
-//                    if (i.startTime < dummyStartTime) {
-//                        i.distanceToClosestFilledItem = dummyStartTime - i.startTime
-//                        break
-//                    }
-//
-//                    if (i.startTime in (biggestDummy + 1) until sleepTime) {
-//                        i.distanceToClosestFilledItem = sleepTime - i.startTime
-//                    }
-//                }
-//
-//            }
-//        }
-
         return itemList
     }
 
@@ -165,13 +130,6 @@ class TransformList {
         distance: Int
     ): Planner {
         return Planner("", "", startTime, duration, type, distance, false)
-    }
-
-    fun calculateWakeUpTime(): LiveData<List<Int>> {
-        var mutableList = MutableLiveData<List<Int>>()
-        mutableList.value = calc()
-
-        return mutableList
     }
 
     private fun calc(): List<Int> {

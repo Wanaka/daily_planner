@@ -102,7 +102,7 @@ class PlannerListFragment : BaseFragment(), OnItemClickListener {
             withContext(Main) {
                 itemRecyclerView.apply {
                     layoutManager = LinearLayoutManager(context)
-                    adapter = PlannerAdapter(list, context, this@PlannerListFragment)
+                    adapter = PlannerAdapter(list, context, this@PlannerListFragment)   
                 }
             }
         }

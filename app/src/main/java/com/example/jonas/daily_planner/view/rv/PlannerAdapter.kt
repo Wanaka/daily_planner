@@ -1,6 +1,7 @@
 package com.example.jonas.daily_planner.view.rv
 
 import android.content.Context
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,6 @@ class PlannerAdapter(
     private val mListener: OnItemClickListener?
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
     interface OnItemClickListener {
         fun onItemClick(context: Context, item: Planner, position: Int)
     }
@@ -28,7 +28,6 @@ class PlannerAdapter(
     override fun getItemCount(): Int {
         return items.size
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return when {
@@ -84,13 +83,21 @@ class PlannerAdapter(
         if (getItemViewType(position) == FIRST) {
             (holder as WakeUpViewHolder)
         } else if (getItemViewType(position) == ITEM) {
-            (holder as ItemViewHolder).itemTitle.text = items[position].title
-            holder.itemSubText.text = items[position].description
-            holder.time.text = items[position].startTime.toString()
-            holder.listItem.layoutParams.height *= items[position].duration
+            (holder as ItemViewHolder)
+            if (items[position].itemType == 5) {
+                holder.listItem.visibility = View.GONE
+                holder.itemSubText.visibility = View.GONE
+                holder.itemTitle.text = items[position].title
+                holder.time.text = items[position].startTime.toString()
+            } else {
+                holder.itemTitle.text = items[position].title
+                holder.itemSubText.text = items[position].description
+                holder.time.text = items[position].startTime.toString()
+                holder.listItem.layoutParams.height *= items[position].duration
 
-            holder.listItem.setOnClickListener {
-                mListener!!.onItemClick(context, items[position], position)
+                holder.listItem.setOnClickListener {
+                    mListener!!.onItemClick(context, items[position], position)
+                }
             }
         } else if (getItemViewType(position) == LAST_ITEM) {
             (holder as EmptyViewHolder)

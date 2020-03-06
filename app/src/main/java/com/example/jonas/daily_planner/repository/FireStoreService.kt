@@ -48,7 +48,6 @@ class FireStoreService @Inject constructor() {
                 endTime = i["endTime"].toString()
             }
         }
-        Log.d(",,,,", "repo: ${startTime}")
 
         return WakeHoursModel(startTime, endTime)
     }
@@ -64,8 +63,6 @@ class FireStoreService @Inject constructor() {
 
 
     suspend fun getDataFromFireStore(context: Context, getDate: String, wakeHours: WakeHoursModel): ArrayList<Planner> {
-
-        Log.d(",,,", "wakehours firebasedb: $wakeHours")
         var plannerList: ArrayList<Planner> = ArrayList()
 
         return try {
@@ -75,7 +72,6 @@ class FireStoreService @Inject constructor() {
 
             if (document.documents != null) {
                 for (i in document.documents) {
-                    Log.d(",,,", "Getlist")
                     plannerList.add(
                         Planner(
                             i.get("title").toString(),

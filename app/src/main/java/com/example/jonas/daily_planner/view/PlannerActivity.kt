@@ -112,7 +112,6 @@ class PlannerActivity : BaseActivity(), Communicator, TimePickerInterface, SendW
     }
 
     override fun sendWakeHours(w: WakeHoursModel) {
-        Log.d(",,,", "send wakehours in activity!!!")
         wakeHours = w
     }
 
